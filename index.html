@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Printing Company | Dynamic</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0f0f0f;
+  --text: #ffffff;
+  --accent: #ff3cac;
+  --secondary: #784ba0;
+  --card: rgba(255,255,255,0.08);
+}
+
+body.light {
+  --bg: #ffffff;
+  --text: #111111;
+  --card: rgba(0,0,0,0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.4s ease;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.company-logo {
+  height: 45px;       /* Perfect navbar size */
+  width: auto;        /* Prevents stretching */
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-toggle {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(270deg, #ff3cac, #784ba0, #2b86c5);
+  background-size: 600% 600%;
+  animation: gradientMove 12s ease infinite;
+  padding: 0 20px;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+.hero-logo {
+  height: 200px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,0.4));
+}
+.hero p {
+  margin-top: 15px;
+  font-size: 1.3rem;
+  opacity: 0.95;
+}
+
+.cta-btn {
+  margin-top: 30px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 50px;
+  background: white;
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cta-btn:hover {
+  transform: scale(1.1);
+}
+
+section {
+  padding: 90px 8%;
+}
+
+.section-title {
+  font-size: 2.6rem;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+/* SERVICES */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+}
+
+.service-card {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  transition: 0.4s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.service-card:hover {
+  transform: translateY(-12px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(120, 75, 160, 0.35);
+}
+
+.service-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+/* PRODUCT CARDS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 25px;
+  backdrop-filter: blur(12px);
+  transition: 0.4s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-12px) scale(1.04);
+  box-shadow: 0 20px 60px rgba(255, 60, 172, 0.35);
+}
+
+/* PROJECT SLIDER */
+.project-slider {
+  position: relative;
+  max-width: 1100px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 25px;
+}
+
+.project-track {
+  display: flex;
+  transition: transform 0.6s ease;
+}
+
+.project-card {
+  min-width: 100%;
+  padding: 40px;
+  background: var(--card);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.project-images {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #111; /* Adds nice frame for logos & prints */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.proj-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* IMPORTANT: prevents zoom & crop */
+  object-position: center; /* centers image */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  padding: 10px; /* adds breathing space */
+}
+
+.logo-img {
+  position: absolute;
+  max-width: 70%;
+  max-height: 70%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.active-img {
+  opacity: 1;
+}
+
+.project-card img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  font-size: 22px;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.prev { left: 15px; }
+.next { right: 15px; }
+
+/* ORDER FORM */
+.form-container {
+  max-width: 650px;
+  margin: auto;
+  background: var(--card);
+  padding: 45px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.submit-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(90deg,#ff3cac,#784ba0);
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 15px 18px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+@media(max-width:768px){
+.hero h1 {font-size: 2.5rem;}
+.project-card img {height: 220px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+  <img src="images/company-logo.png" alt="The Printing Company Logo" class="company-logo">
+  <span>The Printing Company</span>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Theme</button>
+</nav>
+
+<section class="hero">
+  <img src="images/company-logo.png" alt="Company Logo" class="hero-logo">
+  <h1>Print. Design. Dominate.</h1>
+  <p>Trusted by Brands, Businesses & Events Across Cities</p>
+  <button class="cta-btn" onclick="scrollToSection('projects')">View Our Work</button>
+</section>
+
+<!-- PROJECTS (TRUST SECTION) -->
+<section id="projects">
+  <h2 class="section-title">🏆 Real Client Projects (Proof of Quality)</h2>
+  <div class="project-slider">
+    <div class="project-track" id="projectTrack"></div>
+    <button class="slider-btn prev" onclick="moveSlide(-1)">❮</button>
+    <button class="slider-btn next" onclick="moveSlide(1)">❯</button>
+  </div>
+</section>
+
+<!-- NEW DYNAMIC SERVICES SECTION -->
+<section id="services">
+  <h2 class="section-title">🖨️ Our Premium Printing Services</h2>
+  <div class="services-grid" id="servicesContainer"></div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <h2 class="section-title">🔥 Our Dynamic Products</h2>
+  <div class="product-grid" id="productContainer"></div>
+</section>
+
+<!-- ORDER -->
+<section id="order">
+  <h2 class="section-title">🛒 Place Your Order</h2>
+  <div class="form-container">
+    <input type="text" id="name" placeholder="Your Name" required />
+    <input type="text" id="phone" placeholder="Phone Number" required />
+    <select id="product">
+      <option>Business Cards</option>
+      <option>Digital Prints</option>
+      <option>Custom Books</option>
+      <option>Flex Banners</option>
+      <option>Posters</option>
+      <option>Corporate Gift Boxes</option>
+      <option>Others</option>
+    </select>
+    <textarea id="details" placeholder="Describe your printing requirement..."></textarea>
+    <button class="submit-btn" onclick="sendOrder()">Send Order on WhatsApp</button>
+  </div>
+</section>
+
+<a class="whatsapp" href="https://wa.me/916361785445" target="_blank">Chat on WhatsApp</a>
+
+<script>
+// ===== PROJECT DATA =====
+// ===== PROJECT DATA (MULTI-IMAGE GALLERY SUPPORT) =====
+// You can add multiple images per project now
+const projects = [
+  {
+    title: "Karim's Flyers & Ramadan Cards",
+    desc: "50,000 flyers + 5,000 premium Ramadan cards printed with vibrant quality and fast delivery.",
+    images: [{ src: "images/karims-main-logo.png", type: "logo" },
+  { src: "images/karims-flyer.png", type: "print" },
+  { src: "images/karims-ramadan-card1.png", type: "print" }]
+  },
+  {
+    title: "Cricket Crazy League Event Branding",
+    desc: "Banners, certificates, stickers & custom caps for full event branding.",
+    images: [{ src: "images/ccl-main.jpg", type: "logo" },
+  { src: "images/ccl1.jpeg", type: "print" },
+  { src: "images/ccl2.jpeg", type: "print" },
+  { src: "images/ccl3.jpeg", type: "print" }]
+  },
+  {
+    title: "MTR Menu Cards (Dubai Outlet)",
+    desc: "15,000 premium menu cards designed & printed for international restaurant launch.",
+    images: [{ src: "images/mtr logo.png", type: "logo" },
+  { src: "images/mtr 1.png", type: "print" },
+  { src: "images/mtr2.png", type: "print" }]
+  },
+  {
+    title: "DSR Group Corporate Gift Boxes",
+    desc: "Custom corporate gift boxes with diaries, bottles & branded merchandise.",
+    images: [{ src: "images/dsrinfra.jpg", type: "logo" },
+  { src: "images/dsr1.jpeg", type: "print" },
+  { src: "images/dsr3.jpeg", type: "print" }]
+  }
+];
+
+let currentSlide = 0;
+const track = document.getElementById("projectTrack");
+
+projects.forEach(project => {
+  const card = document.createElement("div");
+  card.className = "project-card";
+
+  // Create image slider if multiple images exist
+  let imagesHTML = "";
+  if (project.images && project.images.length > 0) {
+  imagesHTML = `
+    <div class="project-images">
+      ${project.images.map((img, i) => {
+        const src = typeof img === "string" ? img : img.src;
+        const typeClass = (img.type === "logo") ? "logo-img" : "proj-img";
+
+        return `<img src="${src}" class="${typeClass} ${i === 0 ? 'active-img' : ''}" alt="project image" />`;
+      }).join("")}
+    </div>
+  `;
+  } else {
+    imagesHTML = `<img src="${project.image}" alt="${project.title}">`;
+  }
+
+  card.innerHTML = `
+    ${imagesHTML}
+    <h3>${project.title}</h3>
+    <p>${project.desc}</p>
+  `;
+
+  track.appendChild(card);
+});
+// ===== AUTO SLIDESHOW FOR MULTIPLE PROJECT IMAGES =====
+function startProjectSlides() {
+  const projectCards = document.querySelectorAll(".project-images");
+
+  projectCards.forEach(container => {
+    const images = container.querySelectorAll(".proj-img, .logo-img");
+    if (images.length <= 1) return;
+
+    let index = 0;
+
+    function showNext() {
+      images[index].classList.remove("active-img");
+      index = (index + 1) % images.length;
+      images[index].classList.add("active-img");
+
+      // Logo shows longer (4s), prints (2.5s)
+      const isLogo = images[index].classList.contains("logo-img");
+      const delay = isLogo ? 4000 : 2500;
+
+      setTimeout(showNext, delay);
+    }
+
+    setTimeout(showNext, 4000); // first logo stays longer
+  });
+}
+
+// Start slideshow after page loads
+window.addEventListener("load", startProjectSlides);
+
+function moveSlide(direction) {
+  currentSlide += direction;
+  if (currentSlide < 0) currentSlide = projects.length - 1;
+  if (currentSlide >= projects.length) currentSlide = 0;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+
+// ===== SERVICES (ALL 8 YOU SELECTED) =====
+const services = [
+  { icon: "🖨️", title: "Digital Printing" },
+  { icon: "📄", title: "Offset Printing" },
+  { icon: "🪧", title: "Large Format Printing (Banners & Posters)" },
+  { icon: "📚", title: "Book Printing & Binding" },
+  { icon: "🎁", title: "Corporate Gift Printing" },
+  { icon: "🎨", title: "Graphic Designing" },
+  { icon: "✂️", title: "Binding & Finishing" },
+  { icon: "🛍️", title: "Customized Products (Mugs, Mousepads, etc.)" }
+];
+
+const servicesContainer = document.getElementById("servicesContainer");
+services.forEach(service => {
+  const card = document.createElement("div");
+  card.className = "service-card";
+  card.innerHTML = `
+    <div class="service-icon">${service.icon}</div>
+    <h3>${service.title}</h3>
+  `;
+  servicesContainer.appendChild(card);
+});
+
+// ===== PRODUCTS =====
+// ===== PRODUCTS (MULTI IMAGE SUPPORT) =====
+const products = [
+  { name: "Business Cards", desc: "Premium matte, glossy & textured prints" },
+  { name: "Custom Books", desc: "High-quality binding & custom covers" },
+  { name: "Flyers & Brochures", desc: "High conversion marketing prints" },
+  { name: "Posters & Banners", desc: "Large format vibrant printing" },
+  { name: "Corporate Gifts", desc: "Branded gift boxes & merchandise" },
+  { name: "Mugs & Custom Products", desc: "Personalized mugs, mousepads & more" }
+];
+
+const container = document.getElementById("productContainer");
+products.forEach(p => {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  let imageHTML = "";
+  if (p.images && p.images.length > 0) {
+    imageHTML = `
+      <div class="product-gallery">
+        ${p.images.map((img, i) => `<img src="${img}" class="prod-img ${i === 0 ? 'active-img' : ''}" />`).join("")}
+      </div>
+    `;
+  }
+
+  card.innerHTML = `
+    ${imageHTML}
+    <h3>${p.name}</h3>
+    <p>${p.desc}</p>
+  `;
+
+  container.appendChild(card);
+});
+
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+function sendOrder() {
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const product = document.getElementById("product").value;
+  const details = document.getElementById("details").value;
+
+  const message = `Hello, I want to place an order.%0AName: ${name}%0APhone: ${phone}%0AProduct: ${product}%0ADetails: ${details}`;
+  window.open(`https://wa.me/916361785445?text=${message}`, '_blank');
+}
+</script>
+
+</body>
+</html>
